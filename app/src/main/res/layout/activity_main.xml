@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/primary">
+
+
+    <android.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/secondary"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/primary"
+            android:textStyle="bold"
+            android:textSize="17sp" />
+
+    </android.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/sourceSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="From"
+            android:layout_marginRight="10dp" />
+    
+        <Spinner
+            android:id="@+id/sourceSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/sourceSelector"
+        >
+
+        <EditText
+            android:id="@+id/sourceInput"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:hint="Enter source text"
+            android:textColor="@color/black"
+            android:textColorHint="@color/dark"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sourceSelector"
+            android:padding="10sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom">
+
+            <ImageButton
+                android:id="@+id/micInput"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/microphone"
+                android:background="@color/secondary"
+                android:padding="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="fitCenter"
+                />
+
+            <ImageButton
+                android:id="@+id/clearBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/close"
+                android:background="@color/primary"
+                android:padding="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="fitCenter"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/targetSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/inputLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To"
+            android:layout_marginRight="10dp" />
+
+        <Spinner
+            android:id="@+id/targetSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+             />
+
+        <ImageButton
+            android:id="@+id/swapBtn"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/swap_vertical"
+            android:scaleType="fitCenter"
+            android:padding="0dp"
+            android:background="@color/primary"
+            />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/targetOutput"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="10dp"
+        android:hint="Your translated text will be shown here"
+        android:textColorHint="@color/dark"
+        android:padding="10sp"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/targetSelector" />
+
+    <TextView
+        android:id="@+id/cues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/targetOutput"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="3sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="10dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Translate"
+            android:textSize="18sp"
+            android:paddingVertical="15dp"
+            android:id="@+id/translateBtn"
+            android:textColor="@color/primary"
+            android:backgroundTint="@color/secondary"
+            />
+
+        <ImageButton
+            android:id="@+id/cameraBtn"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/camera"
+            android:backgroundTint="@color/secondary"
+            android:layout_marginLeft="10dp"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
