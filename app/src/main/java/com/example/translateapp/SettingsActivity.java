@@ -2,6 +2,8 @@ package com.example.translateapp;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -16,6 +18,7 @@ import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.TranslateRemoteModel;
 import com.google.mlkit.nl.translate.Translator;
 
+import java.util.HashMap;
 import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -27,13 +30,22 @@ public class SettingsActivity extends AppCompatActivity {
 
         RemoteModelManager modelManager = RemoteModelManager.getInstance();
 
-        TextView textview = findViewById(R.id.textview);
+        LinearLayout layout = findViewById(R.id.settings_layout);
 
         modelManager.getDownloadedModels(TranslateRemoteModel.class)
                 .addOnSuccessListener(new OnSuccessListener<Set<TranslateRemoteModel>>() {
                     @Override
                     public void onSuccess(Set<TranslateRemoteModel> translateRemoteModels) {
-                        textview.setText(translateRemoteModels.toString());
+                        for(TranslateRemoteModel item : translateRemoteModels){
+                            String lang = item.getLanguage();
+                            TextView field = new TextView(SettingsActivity.this);
+                            field.setLayoutParams(new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                            ));
+                            layout.addView(field);
+                            field.setText(lang);
+                        }
                     }
                 });
     }

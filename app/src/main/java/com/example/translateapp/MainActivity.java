@@ -2,7 +2,9 @@ package com.example.translateapp;
 
 import static android.app.PendingIntent.getActivity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.icu.text.Transliterator;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -74,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
     ImageButton micInput;
     ImageButton cameraBtn;
     ImageButton clearBtn;
-    Button settingsBtn;
+    Toolbar toolbar;
+    int CAMERA_ACCESS_REQUEST_CODE = 77;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +93,11 @@ public class MainActivity extends AppCompatActivity {
         micInput = findViewById(R.id.micInput);
         cameraBtn = findViewById(R.id.cameraBtn);
         clearBtn = findViewById(R.id.clearBtn);
+        toolbar = findViewById(R.id.toolbar);
 
-        populateHashMap();
+        toolbar.inflateMenu(R.menu.menu);
+
+        populateHashMap(languages);
 
         // Populate spinners
         sourceSpinner = findViewById(R.id.sourceSpinner);
@@ -156,8 +163,7 @@ public class MainActivity extends AppCompatActivity {
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                getImageActivityLauncher.launch(cameraIntent);
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_ACCESS_REQUEST_CODE);
             }
         });
 
@@ -208,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void populateHashMap() {
+    private void populateHashMap(HashMap<String, String> languages) {
         languages.put("AFRIKAANS", "af");
         languages.put("ALBANIAN", "sq");
         languages.put("ARABIC", "ar");
@@ -319,4 +325,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == CAMERA_ACCESS_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            getImageActivityLauncher.launch(cameraIntent);
+        }else{
+            Toast.makeText(MainActivity.this, "Camera permissions not granted.", Toast.LENGTH_LONG).show();
+        }
+
+    }
 }
