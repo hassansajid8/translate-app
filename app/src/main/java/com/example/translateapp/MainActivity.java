@@ -10,6 +10,7 @@ import android.icu.text.Transliterator;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -77,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
     ImageButton micInput;
     ImageButton cameraBtn;
     ImageButton clearBtn;
+    ImageButton speakBtn;
     Toolbar toolbar;
+    TextToSpeech tts;
     int CAMERA_ACCESS_REQUEST_CODE = 77;
 
     @Override
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         cameraBtn = findViewById(R.id.cameraBtn);
         clearBtn = findViewById(R.id.clearBtn);
         toolbar = findViewById(R.id.toolbar);
+        speakBtn = findViewById(R.id.speakBtn);
 
         toolbar.inflateMenu(R.menu.menu);
 
@@ -110,6 +114,13 @@ public class MainActivity extends AppCompatActivity {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sourceSpinner.setAdapter(spinnerAdapter);
         targetSpinner.setAdapter(spinnerAdapter);
+
+        tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                tts.setLanguage(Locale.ENGLISH);
+            }
+        });
 
         // clear button action
         clearBtn.setOnClickListener(new View.OnClickListener() {
@@ -167,8 +178,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        
-
         // translate button action
         translateBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -179,6 +188,27 @@ public class MainActivity extends AppCompatActivity {
                         translateText(sourceLangCode, targetLangCode, sourceInput.getText().toString());
                     }
                 });
+
+        // text to speech action
+        speakBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(targetSpinner.getSelectedItem().toString().equals("JAPANESE")){
+                    tts.setLanguage(Locale.JAPANESE);
+                }else if(targetSpinner.getSelectedItem().toString().equals("CHINESE")){
+                    tts.setLanguage(Locale.CHINESE);
+                }else if(targetSpinner.getSelectedItem().toString().equals("ITALIAN")){
+                    tts.setLanguage(Locale.ITALIAN);
+                }else if(targetSpinner.getSelectedItem().toString().equals("HINDI")){
+                    tts.setLanguage(new Locale("hin", "IND", "variant"));
+                }else if(!targetSpinner.getSelectedItem().toString().equals("ENGLISH")){
+                    Toast.makeText(MainActivity.this, "Language audio not supported yet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                tts.speak(targetOutput.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, null);
+            }
+        });
     }
 
     private void translateText(String sourceCode, String targetCode, String inputText) {
@@ -335,5 +365,14 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Camera permissions not granted.", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(tts != null){
+            tts.stop();
+            tts.shutdown();
+        }
     }
 }
